@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,6 +31,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  void getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.lowest);
+    print(position);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,19 +48,21 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'You have pushed the button this many times:',
+              'We\'re trying to find the Lat and Lang:',
             ),
             Text(
-              '',
+              'Location',
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        onPressed: () {
+          getLocation();
+        },
+        tooltip: 'Get Location',
+        child: const Icon(Icons.location_on),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
