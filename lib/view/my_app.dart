@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'first_page.dart';
+
 import 'my_app_home.dart';
-import 'second_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -14,12 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      //home: const MyAppHome(title: 'Flutter Demo Home Page'),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const FirstPage(),
-        SecondPage.routeName: (context) => const SecondPage(),
-      },
+      home: const MyAppHome(title: 'Flutter Demo Home Page'),
     );
   }
 }
