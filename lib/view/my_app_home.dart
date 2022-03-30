@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:with_her/model/location.dart';
 
 class MyAppHome extends StatefulWidget {
   const MyAppHome({Key? key, required this.title}) : super(key: key);
@@ -13,79 +13,105 @@ class MyAppHome extends StatefulWidget {
 }
 
 class _MyAppHomeState extends State<MyAppHome> {
-  var apiKey = '4d3565f5da5cc784bf9f20f990fb8399';
-  double lat = 22.5892652;
-  double lon = 88.3056119;
+  String apiKey = 'Your Key';
+  double lat = 40.7128;
+  double lon = 74.0060;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getData();
-  }
-
-  void getData() async {
-    final httpsUri = Uri(
-        scheme: 'https',
-        host: 'api.openweathermap.org',
-        path: 'data/2.5/weather',
-        fragment: 'numbers');
-    /* var uri = Uri.http(
-        'http://api.openweathermap.org/data/2.5/weather?lat=$lat&$lon&appid=$apiKey',
-        unencodedPath); */
+  Future<String> getCityName() async {
+    final httpsUri = Uri.http('api.openweathermap.org', '/data/2.5/weather', {
+      'lat': '$lat',
+      'lon': '$lon',
+      'appid': apiKey,
+    });
 
     var request = await http.get(httpsUri);
     if (request.statusCode == 200) {
       String data = request.body.toString();
       var city = jsonDecode(data)['name'];
-      var description = jsonDecode(data)['weather'][0]['description'];
-      print('Welcome to $city city!');
-      print('Weather: $description');
+
+      return city;
     } else {
-      print(request.statusCode);
-      print(
-          'Latitude is: $lat *** Longitude is: $lon'); // this prints longitude and latitude values
-      print(
-          'request $httpsUri'); // when I entered the url in postman, I'm getting the same error 400
+      return '${request.statusCode}';
     }
   }
 
-  void getLocation() async {
-    UserLocation location = UserLocation();
-    await location.getLocationWithGeolocator();
-    lat = location.latitude;
-    lon = location.longitude;
-    getData();
+  Future<String> getWeather() async {
+    final httpsUri = Uri.http('api.openweathermap.org', '/data/2.5/weather', {
+      'lat': '$lat',
+      'lon': '$lon',
+      'appid': apiKey,
+    });
+
+    var request = await http.get(httpsUri);
+    if (request.statusCode == 200) {
+      String data = request.body.toString();
+      var description = jsonDecode(data)['weather'][0]['description'];
+
+      return description;
+    } else {
+      return '${request.statusCode}';
+    }
   }
+
+  String city = 'Your ';
+  String description = 'Good Weather ';
 
   @override
   Widget build(BuildContext context) {
+    //var city = getData();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('XXX'),
+        title: const Text('Get City and Weather'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'We\'re trying to find the Lat and Lang:',
+            Text(
+              'Welcome to ${city.toString()} city!',
+              style: Theme.of(context).textTheme.headline6,
             ),
             Text(
-              'Location',
+              description.toString(),
               style: Theme.of(context).textTheme.headline4,
             ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            TextButton(
+              onPressed: () {
+                getCityName().then((String result) {
+                  setState(() {
+                    city = result;
+                  });
+                });
+                getWeather().then((String result) {
+                  setState(() {
+                    description = result;
+                  });
+                });
+              },
+              child: const Text(
+                'Get City and Current Weather',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.red),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          getLocation();
-          getData();
-        },
-        tooltip: 'Get Location',
-        child: const Icon(Icons.location_on),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
