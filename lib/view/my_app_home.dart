@@ -1,5 +1,6 @@
+import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:with_her/model/location.dart';
 
 class MyAppHome extends StatefulWidget {
@@ -12,11 +13,36 @@ class MyAppHome extends StatefulWidget {
 }
 
 class _MyAppHomeState extends State<MyAppHome> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getHTTPData();
+  }
+
   void getLocation() async {
     UserLocation location = UserLocation();
 
     print(location.latitude);
     print(location.longitude);
+  }
+
+  void getHTTPData() async {
+    var url = Uri.https(
+        'https://api.openweathermap.org',
+        '/data/2.5/weather?lat={22.5892652}&lon={88.3056119}&appid={4d3565f5da5cc784bf9f20f990fb8399}',
+        {'q': '{http}'});
+    http.Response response = await http.get(url);
+    print(response);
+    /* var response = await http.get(url);
+    if (response.statusCode == 200) {
+      var jsonResponse =
+          convert.jsonDecode(response.body) as Map<String, dynamic>;
+      //var itemCount = jsonResponse['totalItems'];
+      print('Number of books about http: $jsonResponse.');
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    } */
   }
 
   @override
