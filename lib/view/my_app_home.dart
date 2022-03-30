@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:with_her/model/location.dart';
 
 class MyAppHome extends StatefulWidget {
@@ -12,41 +13,56 @@ class MyAppHome extends StatefulWidget {
 }
 
 class _MyAppHomeState extends State<MyAppHome> {
-  void getLocation() async {
-    UserLocation location = UserLocation();
+  var apiKey = '4d3565f5da5cc784bf9f20f990fb8399';
+  double lat = 22.5892652;
+  double lon = 88.3056119;
 
-    print(location.latitude);
-    print(location.longitude);
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
   }
 
   void getData() async {
-    var url = Uri.https(
-      'https://api.openweathermap.org',
-      '/data/2.5/weather?lat=22.5892652&lon=88.3056119&appid=4d3565f5da5cc784bf9f20f990fb8399',
-    );
-    try {
-      Response response = await get(url);
-      print(response);
-    } catch (e) {
-      print(e);
-    }
+    final httpsUri = Uri(
+        scheme: 'https',
+        host: 'api.openweathermap.org',
+        path: 'data/2.5/weather',
+        fragment: 'numbers');
+    /* var uri = Uri.http(
+        'http://api.openweathermap.org/data/2.5/weather?lat=$lat&$lon&appid=$apiKey',
+        unencodedPath); */
 
-    /* var response = await http.get(url);
-    if (response.statusCode == 200) {
-      var jsonResponse =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
-      //var itemCount = jsonResponse['totalItems'];
-      print('Number of books about http: $jsonResponse.');
+    var request = await http.get(httpsUri);
+    if (request.statusCode == 200) {
+      String data = request.body.toString();
+      var city = jsonDecode(data)['name'];
+      var description = jsonDecode(data)['weather'][0]['description'];
+      print('Welcome to $city city!');
+      print('Weather: $description');
     } else {
-      print('Request failed with status: ${response.statusCode}.');
-    } */
+      print(request.statusCode);
+      print(
+          'Latitude is: $lat *** Longitude is: $lon'); // this prints longitude and latitude values
+      print(
+          'request $httpsUri'); // when I entered the url in postman, I'm getting the same error 400
+    }
+  }
+
+  void getLocation() async {
+    UserLocation location = UserLocation();
+    await location.getLocationWithGeolocator();
+    lat = location.latitude;
+    lon = location.longitude;
+    getData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text('XXX'),
       ),
       body: Center(
         child: Column(
