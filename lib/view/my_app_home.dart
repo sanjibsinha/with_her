@@ -1,6 +1,5 @@
-import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:with_her/model/location.dart';
 
 class MyAppHome extends StatefulWidget {
@@ -13,13 +12,6 @@ class MyAppHome extends StatefulWidget {
 }
 
 class _MyAppHomeState extends State<MyAppHome> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getHTTPData();
-  }
-
   void getLocation() async {
     UserLocation location = UserLocation();
 
@@ -27,13 +19,18 @@ class _MyAppHomeState extends State<MyAppHome> {
     print(location.longitude);
   }
 
-  void getHTTPData() async {
+  void getData() async {
     var url = Uri.https(
-        'https://api.openweathermap.org',
-        '/data/2.5/weather?lat={22.5892652}&lon={88.3056119}&appid={4d3565f5da5cc784bf9f20f990fb8399}',
-        {'q': '{http}'});
-    http.Response response = await http.get(url);
-    print(response);
+      'https://api.openweathermap.org',
+      '/data/2.5/weather?lat=22.5892652&lon=88.3056119&appid=4d3565f5da5cc784bf9f20f990fb8399',
+    );
+    try {
+      Response response = await get(url);
+      print(response);
+    } catch (e) {
+      print(e);
+    }
+
     /* var response = await http.get(url);
     if (response.statusCode == 200) {
       var jsonResponse =
@@ -68,6 +65,7 @@ class _MyAppHomeState extends State<MyAppHome> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           getLocation();
+          getData();
         },
         tooltip: 'Get Location',
         child: const Icon(Icons.location_on),
