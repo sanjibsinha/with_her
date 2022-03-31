@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../model/location.dart';
 
+/// expleining json
+///
 class MyAppHome extends StatefulWidget {
   const MyAppHome({Key? key, required this.title}) : super(key: key);
 
