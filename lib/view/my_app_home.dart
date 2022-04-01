@@ -14,8 +14,8 @@ class MyAppHome extends StatefulWidget {
 }
 
 class _MyAppHomeState extends State<MyAppHome> {
-  var city = 'Your ';
-  var description = 'Good Weather ';
+  var city = ' ';
+  var description = ' ';
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class _MyAppHomeState extends State<MyAppHome> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Welcome to ${city.toString()} city!',
+              city.toString(),
               style: Theme.of(context).textTheme.headline6,
             ),
             Text(
@@ -41,17 +41,26 @@ class _MyAppHomeState extends State<MyAppHome> {
               height: 20.0,
             ),
             TextButton(
-              onPressed: () {
-                location.getCitynameWithGeolocator().then((result) {
+              onPressed: () async {
+                city = await location.getCitynameWithGeolocator();
+                setState(() {
+                  city = city;
+                });
+                description =
+                    await location.getWeatherDescriptionWithGeolocator();
+                setState(() {
+                  description = description;
+                });
+                /* location.getCitynameWithGeolocator().then((result) {
                   setState(() {
                     city = result;
                   });
-                });
-                location.getWeatherDescriptionWithGeolocator().then((result) {
+                }); */
+                /* location.getWeatherDescriptionWithGeolocator().then((result) {
                   setState(() {
                     description = result;
                   });
-                });
+                }); */
               },
               child: const Text(
                 'Get City and Current Weather',
