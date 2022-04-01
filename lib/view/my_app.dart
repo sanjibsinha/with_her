@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyAppHome(title: 'Flutter Demo Home Page'),
+      home: const MyAppHome(title: 'Get City and Weather'),
     );
   }
 }

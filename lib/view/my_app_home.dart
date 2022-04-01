@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../model/location.dart';
@@ -14,16 +15,21 @@ class MyAppHome extends StatefulWidget {
 }
 
 class _MyAppHomeState extends State<MyAppHome> {
-  var city = ' ';
-  var description = ' ';
+  UserLocation location = UserLocation();
+  var city = '';
+  var description = '';
+
+  @override
+  void initState() {
+    super.initState();
+    print(location.getWeatherWithGeolocator());
+  }
 
   @override
   Widget build(BuildContext context) {
-    UserLocation location = UserLocation();
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Get City and Weather'),
+        title: Text(widget.title),
       ),
       body: Center(
         child: Column(

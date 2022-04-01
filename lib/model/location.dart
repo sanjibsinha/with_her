@@ -9,7 +9,7 @@ class UserLocation {
           desiredAccuracy: LocationAccuracy.lowest);
       double lat = position.latitude;
       double lon = position.longitude;
-      return getCityName(lat, lon, 'Secret Key');
+      return getCityName(lat, lon, 'Secret');
     } catch (e) {
       return e.toString();
     }
@@ -21,7 +21,7 @@ class UserLocation {
           desiredAccuracy: LocationAccuracy.lowest);
       double lat = position.latitude;
       double lon = position.longitude;
-      return getWeatherDescription(lat, lon, 'Secret Key');
+      return getWeatherDescription(lat, lon, 'Secret');
     } catch (e) {
       return e.toString();
     }
@@ -63,11 +63,20 @@ class UserLocation {
       return '${request.statusCode}';
     }
   }
-}
 
-/**
- * 
- * Future<void> getCurrentWeather() async {
+  Future getWeatherWithGeolocator() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.lowest);
+      double lat = position.latitude;
+      double lon = position.longitude;
+      getWeatherData(lat, lon, 'Secret');
+    } catch (e) {
+      e;
+    }
+  }
+
+  Future getWeatherData(double lat, double lon, String apiKey) async {
     final httpsUri = Uri.http('api.openweathermap.org', '/data/2.5/weather', {
       'lat': '$lat',
       'lon': '$lon',
@@ -76,14 +85,9 @@ class UserLocation {
 
     var request = await http.get(httpsUri);
     if (request.statusCode == 200) {
-      String data = request.body.toString();
-      var city = jsonDecode(data)['name'];
-      var description = jsonDecode(data)['weather'][0]['description'];
-      city;
-      description;
+      request;
     } else {
       '${request.statusCode}';
     }
   }
-
- */
+}
