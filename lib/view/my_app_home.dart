@@ -42,12 +42,12 @@ class _MyAppHomeState extends State<MyAppHome> {
             ),
             TextButton(
               onPressed: () {
-                location.getCityName().then((result) {
+                location.getCitynameWithGeolocator().then((result) {
                   setState(() {
                     city = result;
                   });
                 });
-                location.getWeather().then((result) {
+                location.getWeatherDescriptionWithGeolocator().then((result) {
                   setState(() {
                     description = result;
                   });
