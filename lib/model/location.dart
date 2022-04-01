@@ -3,22 +3,31 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 class UserLocation {
-  String apiKey = 'Secret Key';
-  double lat = 40.7128;
-  double lon = 74.0060;
-
-  Future<void> getLocationWithGeolocator() async {
+  Future<String> getCitynameWithGeolocator() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.lowest);
-      lat = position.latitude;
-      lon = position.longitude;
+      double lat = position.latitude;
+      double lon = position.longitude;
+      return getCityName(lat, lon, 'Secret Key');
     } catch (e) {
-      print(e);
+      return e.toString();
     }
   }
 
-  Future<String> getCityName() async {
+  Future<String> getWeatherDescriptionWithGeolocator() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.lowest);
+      double lat = position.latitude;
+      double lon = position.longitude;
+      return getWeatherDescription(lat, lon, 'Secret Key');
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future<String> getCityName(double lat, double lon, String apiKey) async {
     final httpsUri = Uri.http('api.openweathermap.org', '/data/2.5/weather', {
       'lat': '$lat',
       'lon': '$lon',
@@ -36,7 +45,8 @@ class UserLocation {
     }
   }
 
-  Future<String> getWeather() async {
+  Future<String> getWeatherDescription(
+      double lat, double lon, String apiKey) async {
     final httpsUri = Uri.http('api.openweathermap.org', '/data/2.5/weather', {
       'lat': '$lat',
       'lon': '$lon',
@@ -54,3 +64,26 @@ class UserLocation {
     }
   }
 }
+
+/**
+ * 
+ * Future<void> getCurrentWeather() async {
+    final httpsUri = Uri.http('api.openweathermap.org', '/data/2.5/weather', {
+      'lat': '$lat',
+      'lon': '$lon',
+      'appid': apiKey,
+    });
+
+    var request = await http.get(httpsUri);
+    if (request.statusCode == 200) {
+      String data = request.body.toString();
+      var city = jsonDecode(data)['name'];
+      var description = jsonDecode(data)['weather'][0]['description'];
+      city;
+      description;
+    } else {
+      '${request.statusCode}';
+    }
+  }
+
+ */
