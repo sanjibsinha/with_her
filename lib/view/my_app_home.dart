@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../model/location.dart';
+import 'weather_page.dart';
 
 /// this is sixth step and last one on Future
 ///
@@ -15,83 +16,28 @@ class MyAppHome extends StatefulWidget {
 
 class _MyAppHomeState extends State<MyAppHome> {
   UserLocation location = UserLocation();
-  var city = '';
-  var description = '';
 
   @override
   void initState() {
     super.initState();
-    var description;
+    updateWeather();
+  }
+
+  void updateWeather() {
+    var weather;
     location.getWeatherWithGeolocator().then((value) {
-      description = value;
-      print(description);
+      weather = value;
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return WeatherPage(
+          weather: weather,
+          title: 'Get City and Weather',
+        );
+      }));
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              city.toString(),
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            Text(
-              description.toString(),
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            const SizedBox(
-              height: 20.0,
-            ),
-            TextButton(
-              onPressed: () async {
-                city = await location.getCitynameWithGeolocator();
-                setState(() {
-                  city = city;
-                });
-                description =
-                    await location.getWeatherDescriptionWithGeolocator();
-                setState(() {
-                  description = description;
-                });
-                /* location.getCitynameWithGeolocator().then((result) {
-                  setState(() {
-                    city = result;
-                  });
-                }); */
-                /* location.getWeatherDescriptionWithGeolocator().then((result) {
-                  setState(() {
-                    description = result;
-                  });
-                }); */
-              },
-              child: const Text(
-                'Get City and Current Weather',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.red),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      // This trailing comma makes auto-formatting nicer for build methods.
-    );
+    return const Scaffold();
   }
 }
