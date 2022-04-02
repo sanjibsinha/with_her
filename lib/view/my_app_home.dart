@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../model/location.dart';
 
-/// expleining json
+/// this is sixth step and last one on Future
 ///
 class MyAppHome extends StatefulWidget {
   const MyAppHome({Key? key, required this.title}) : super(key: key);
