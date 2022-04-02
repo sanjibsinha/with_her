@@ -22,7 +22,11 @@ class _MyAppHomeState extends State<MyAppHome> {
   @override
   void initState() {
     super.initState();
-    print(location.getWeatherWithGeolocator());
+    var description;
+    location.getWeatherWithGeolocator().then((value) {
+      description = value;
+      print(description);
+    });
   }
 
   @override

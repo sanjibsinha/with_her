@@ -70,7 +70,8 @@ class UserLocation {
           desiredAccuracy: LocationAccuracy.lowest);
       double lat = position.latitude;
       double lon = position.longitude;
-      getWeatherData(lat, lon, 'Secret');
+      var data = getWeatherData(lat, lon, 'Secret');
+      return data;
     } catch (e) {
       e;
     }
@@ -85,7 +86,9 @@ class UserLocation {
 
     var request = await http.get(httpsUri);
     if (request.statusCode == 200) {
-      request;
+      String data = request.body;
+      var decodedData = jsonDecode(data);
+      return decodedData;
     } else {
       '${request.statusCode}';
     }
