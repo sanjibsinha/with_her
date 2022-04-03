@@ -19,24 +19,41 @@ class _WeatherPageState extends State<WeatherPage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              widget.weather['name'],
-              style: Theme.of(context).textTheme.headline6,
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(
+                  'https://cdn.pixabay.com/photo/2022/02/19/22/48/forest-7023487_960_720.jpg'),
+              fit: BoxFit.cover,
             ),
-            Text(
-              widget.weather['weather'][0]['description'],
-              style: Theme.of(context).textTheme.headline4,
+          ),
+          constraints: const BoxConstraints.expand(),
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Welcome to ${widget.weather['name']}',
+                  style: Theme.of(context).textTheme.headline3,
+                ),
+                Text(
+                  'Current temperature: ${(widget.weather['main']['temp'] - 273.15).toStringAsFixed(2)} Celsius',
+                  //'Current temperature: ${widget.weather['main']['temp']}) Celsius',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Text(
+                  'Current condition: ${widget.weather['weather'][0]['description']}',
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 20.0,
-            ),
-          ],
+          ),
+          // This trailing comma makes auto-formatting nicer for build methods.
         ),
       ),
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

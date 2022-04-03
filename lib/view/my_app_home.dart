@@ -38,6 +38,8 @@ class _MyAppHomeState extends State<MyAppHome> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      backgroundColor: Colors.grey.shade600,
+    );
   }
 }
